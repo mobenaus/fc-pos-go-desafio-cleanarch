@@ -6,7 +6,7 @@ import (
 
 type OrderListInputDTO struct {
 	Page  int `json:"page"`
-	limit int `json:"limit"`
+	Limit int `json:"limit"`
 }
 
 type OrderListOutputDTO struct {
@@ -29,7 +29,7 @@ func NewListOrdersUseCase(
 }
 
 func (c *ListOrdersUseCase) Execute(input OrderListInputDTO) ([]OrderListOutputDTO, error) {
-	orderList, err := c.OrderRepository.List(input.Page, input.limit)
+	orderList, err := c.OrderRepository.List(input.Page, input.Limit)
 	if err != nil {
 		return []OrderListOutputDTO{}, err
 	}
