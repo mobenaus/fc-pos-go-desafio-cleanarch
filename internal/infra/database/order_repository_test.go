@@ -22,7 +22,7 @@ type OrderRepositoryTestSuite struct {
 	Db *sql.DB
 }
 
-func (suite *OrderRepositoryTestSuite) SetupSuite() {
+func (suite *OrderRepositoryTestSuite) SetupTest() {
 	db, err := sql.Open("sqlite3", ":memory:")
 	suite.NoError(err)
 	//db.Exec("CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id))")
@@ -70,4 +70,31 @@ func (suite *OrderRepositoryTestSuite) TestGivenAnOrder_WhenSave_ThenShouldSaveO
 	suite.Equal(order.Price, orderResult.Price)
 	suite.Equal(order.Tax, orderResult.Tax)
 	suite.Equal(order.FinalPrice, orderResult.FinalPrice)
+}
+
+func (suite *OrderRepositoryTestSuite) TestGivenOrders_WhenSave_ThenShouldQueryOrders() {
+	order1, err := entity.NewOrder("123", 10.0, 2.0)
+	order2, err := entity.NewOrder("456", 140.0, 1.0)
+	suite.NoError(err)
+	suite.NoError(order1.CalculateFinalPrice())
+	suite.NoError(order2.CalculateFinalPrice())
+	repo := NewOrderRepository(suite.Db)
+	err = repo.Save(order1)
+	err = repo.Save(order2)
+	suite.NoError(err)
+
+	orders1, err := repo.List(1, 1)
+	suite.NoError(err)
+	suite.Equal(1, len(orders1))
+	suite.Equal("123", orders1[0].ID)
+	orders2, err := repo.List(2, 1)
+	suite.NoError(err)
+	suite.Equal(1, len(orders2))
+	suite.Equal("456", orders2[0].ID)
+	orders, err := repo.List(1, 10)
+	suite.NoError(err)
+	suite.Equal(2, len(orders))
+	suite.Equal("123", orders[0].ID)
+	suite.Equal("456", orders[1].ID)
+
 }

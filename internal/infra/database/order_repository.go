@@ -34,3 +34,32 @@ func (r *OrderRepository) GetTotal() (int, error) {
 	}
 	return total, nil
 }
+
+func (r *OrderRepository) List(page int, limit int) ([]entity.Order, error) {
+	var selectpage = page - 1
+	var selectlimit = limit
+	if page < 1 {
+		selectpage = 0
+	}
+	if limit < 1 {
+		limit = 1
+	}
+	println(selectlimit)
+	println(selectpage)
+	rows, err := r.Db.Query("select id, price, tax, final_price from orders limit ? offset ?", selectlimit, selectpage)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var orders []entity.Order
+	for rows.Next() {
+		var o entity.Order
+		err = rows.Scan(&o.ID, &o.Price, &o.Tax, &o.FinalPrice)
+		if err != nil {
+			return nil, err
+		}
+		orders = append(orders, o)
+	}
+	return orders, nil
+
+}
