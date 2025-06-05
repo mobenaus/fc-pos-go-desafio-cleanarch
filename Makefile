@@ -6,10 +6,9 @@ build:
 	cd cmd/ordersystem && go build -o ${BINARY_NAME} main.go wire_gen.go
 
 run: services
-	cd cmd/ordersystem && go run main.go wire_gen.go
+	go run cmd/ordersystem/main.go cmd/ordersystem/wire_gen.go 
  
 test:
-	go clean -testcache
 	go test ./...
  
 clean:

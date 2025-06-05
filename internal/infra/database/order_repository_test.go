@@ -8,7 +8,13 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	// sqlite3
+
 	_ "github.com/mattn/go-sqlite3"
+
+	// migrations
+	"github.com/golang-migrate/migrate/v4"
+	sqlitemigrate "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 type OrderRepositoryTestSuite struct {
@@ -19,7 +25,23 @@ type OrderRepositoryTestSuite struct {
 func (suite *OrderRepositoryTestSuite) SetupSuite() {
 	db, err := sql.Open("sqlite3", ":memory:")
 	suite.NoError(err)
-	db.Exec("CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id))")
+	//db.Exec("CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id))")
+
+	instance, err := sqlitemigrate.WithInstance(db, &sqlitemigrate.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	// o file abaixo tem que ter o ../../.. para referenciar a raiz do projeto
+	migration, err := migrate.NewWithDatabaseInstance("file://../../../migrations/", "mysql", instance)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := migration.Up(); err != nil {
+		panic(err)
+	}
+
 	suite.Db = db
 }
 

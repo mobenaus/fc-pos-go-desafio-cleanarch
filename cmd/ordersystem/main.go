@@ -21,6 +21,11 @@ import (
 
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
+
+	// golang-migrate
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -34,6 +39,23 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
+
+	instance, err := mysql.WithInstance(db, &mysql.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	// o file abaixo referencia a raiz do projeto
+	migration, err := migrate.NewWithDatabaseInstance("file://migrations/", "mysql", instance)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := migration.Up(); err != nil {
+		if err != migrate.ErrNoChange {
+			panic(err)
+		}
+	}
 
 	rabbitMQChannel := getRabbitMQChannel()
 
