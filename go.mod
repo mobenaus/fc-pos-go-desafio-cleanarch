@@ -1,4 +1,4 @@
-module github.com/devfullcycle/20-CleanArch
+module github.com/mobenaus/fc-pos-go-desafio-cleancode
 
 go 1.19
 

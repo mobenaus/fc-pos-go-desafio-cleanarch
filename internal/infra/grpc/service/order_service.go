@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/devfullcycle/20-CleanArch/internal/infra/grpc/pb"
-	"github.com/devfullcycle/20-CleanArch/internal/usecase"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/infra/grpc/pb"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/usecase"
 )
 
 type OrderService struct {

@@ -6,13 +6,13 @@ package main
 import (
 	"database/sql"
 
-	"github.com/devfullcycle/20-CleanArch/internal/entity"
-	"github.com/devfullcycle/20-CleanArch/internal/event"
-	"github.com/devfullcycle/20-CleanArch/internal/infra/database"
-	"github.com/devfullcycle/20-CleanArch/internal/infra/web"
-	"github.com/devfullcycle/20-CleanArch/internal/usecase"
-	"github.com/devfullcycle/20-CleanArch/pkg/events"
 	"github.com/google/wire"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/entity"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/event"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/infra/database"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/infra/web"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/usecase"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/pkg/events"
 )
 
 var setOrderRepositoryDependency = wire.NewSet(

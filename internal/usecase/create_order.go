@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/devfullcycle/20-CleanArch/internal/entity"
-	"github.com/devfullcycle/20-CleanArch/pkg/events"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/entity"
+	"github.com/mobenaus/fc-pos-go-desafio-cleancode/pkg/events"
 )
 
 type OrderInputDTO struct {
