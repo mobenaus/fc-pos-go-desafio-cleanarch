@@ -8,4 +8,5 @@ import "github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/usecase"
 
 type Resolver struct {
 	CreateOrderUseCase usecase.CreateOrderUseCase
+	ListOrdersUseCase  usecase.ListOrdersUseCase
 }

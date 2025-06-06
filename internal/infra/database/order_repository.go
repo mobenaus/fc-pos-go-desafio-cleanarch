@@ -44,9 +44,7 @@ func (r *OrderRepository) List(page int, limit int) ([]entity.Order, error) {
 	if limit < 1 {
 		limit = 1
 	}
-	println(selectlimit)
-	println(selectpage)
-	rows, err := r.Db.Query("select id, price, tax, final_price from orders limit ? offset ?", selectlimit, selectpage)
+	rows, err := r.Db.Query("select id, price, tax, final_price from orders limit ? offset ?", selectlimit, selectpage*selectlimit)
 	if err != nil {
 		return nil, err
 	}

@@ -33,3 +33,29 @@ Para gerenciar as migrações de banco de dados é utilizado o https://github.co
   ```docker run -v $(pwd)/migrations:/migrations --user $(id -u):$(id -g) migrate/migrate create -dir /migrations/ -ext sql orders```
 - A aplicação da migration é feita pela aplicação no momento de iniciar.
 - Os testes tambem aplicam as migrations.
+
+## GRPC
+
+Em caso de alteração:
+- Instalar o protoc conforme documentação
+- instalar os plugins:
+  - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+  - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+- executar o protoc
+  - protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
+
+## GraphQL
+
+Em caso de alteração:
+- executar go run github.com/99designs/gqlgen generate
+
+## DI Wire
+
+Em caso de alteração:
+- Instalar com:
+  - go install github.com/google/wire/cmd/wire@latest
+- Gerar com:
+  - cd cmd/ordersystem
+  - wire
+
+

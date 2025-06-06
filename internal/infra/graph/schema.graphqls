@@ -11,6 +11,16 @@ input OrderInput {
     Tax: Float!
 }
 
+input ListOrdersInput {
+    page : Int!
+    limit : Int!
+}
+
+type OrderList {
+    orders: [Order!]!
+}
+
 type Mutation {
     createOrder(input: OrderInput): Order
+    listOrders(input: ListOrdersInput): OrderList
 }
