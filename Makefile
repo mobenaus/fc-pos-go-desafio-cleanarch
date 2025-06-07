@@ -38,4 +38,4 @@ generate-grpc:
 	protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
 
 wire-di:
-	wire
+	cd cmd/ordersystem && wire

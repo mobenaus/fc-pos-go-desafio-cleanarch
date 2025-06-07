@@ -10,7 +10,6 @@ import (
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/entity"
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/event"
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/infra/database"
-	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/infra/web"
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/usecase"
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/pkg/events"
 )
@@ -47,13 +46,4 @@ func NewListOrdersUseCase(db *sql.DB) *usecase.ListOrdersUseCase {
 		usecase.NewListOrdersUseCase,
 	)
 	return &usecase.ListOrdersUseCase{}
-}
-
-func NewWebOrderHandler(db *sql.DB, eventDispatcher events.EventDispatcherInterface) *web.WebOrderHandler {
-	wire.Build(
-		setOrderRepositoryDependency,
-		setOrderCreatedEvent,
-		web.NewWebOrderHandler,
-	)
-	return &web.WebOrderHandler{}
 }

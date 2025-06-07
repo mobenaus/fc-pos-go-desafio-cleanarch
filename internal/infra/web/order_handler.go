@@ -5,26 +5,21 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/entity"
 	"github.com/mobenaus/fc-pos-go-desafio-cleancode/internal/usecase"
-	"github.com/mobenaus/fc-pos-go-desafio-cleancode/pkg/events"
 )
 
 type WebOrderHandler struct {
-	EventDispatcher   events.EventDispatcherInterface
-	OrderRepository   entity.OrderRepositoryInterface
-	OrderCreatedEvent events.EventInterface
+	CreateOrderUseCase usecase.CreateOrderUseCase
+	ListOrdersUseCase  usecase.ListOrdersUseCase
 }
 
 func NewWebOrderHandler(
-	EventDispatcher events.EventDispatcherInterface,
-	OrderRepository entity.OrderRepositoryInterface,
-	OrderCreatedEvent events.EventInterface,
+	CreateOrderUseCase usecase.CreateOrderUseCase,
+	ListOrdersUseCase usecase.ListOrdersUseCase,
 ) *WebOrderHandler {
 	return &WebOrderHandler{
-		EventDispatcher:   EventDispatcher,
-		OrderRepository:   OrderRepository,
-		OrderCreatedEvent: OrderCreatedEvent,
+		CreateOrderUseCase: CreateOrderUseCase,
+		ListOrdersUseCase:  ListOrdersUseCase,
 	}
 }
 
@@ -36,8 +31,7 @@ func (h *WebOrderHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createOrder := usecase.NewCreateOrderUseCase(h.OrderRepository, h.OrderCreatedEvent, h.EventDispatcher)
-	output, err := createOrder.Execute(dto)
+	output, err := h.CreateOrderUseCase.Execute(dto)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -66,9 +60,7 @@ func (h *WebOrderHandler) List(w http.ResponseWriter, r *http.Request) {
 		Limit: int(limit),
 	}
 
-	listOrdersUseCase := usecase.NewListOrdersUseCase(h.OrderRepository)
-
-	output, err := listOrdersUseCase.Execute(dto)
+	output, err := h.ListOrdersUseCase.Execute(dto)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
