@@ -41,7 +41,7 @@ func (r *mutationResolver) ListOrders(ctx context.Context, input *model.ListOrde
 		return nil, err
 	}
 	var orders = []*model.Order{}
-	for _, o := range output {
+	for _, o := range output.Orders {
 		orders = append(orders, &model.Order{
 			ID:         o.ID,
 			Price:      o.Price,
@@ -50,6 +50,7 @@ func (r *mutationResolver) ListOrders(ctx context.Context, input *model.ListOrde
 		})
 	}
 	return &model.OrderList{
+		Total:  output.Total,
 		Orders: orders,
 	}, nil
 }

@@ -17,6 +17,7 @@ input ListOrdersInput {
 }
 
 type OrderList {
+    total: Int!
     orders: [Order!]!
 }
 

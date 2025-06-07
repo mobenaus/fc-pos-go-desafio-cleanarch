@@ -21,5 +21,6 @@ type OrderInput struct {
 }
 
 type OrderList struct {
+	Total  int      `json:"total"`
 	Orders []*Order `json:"orders"`
 }

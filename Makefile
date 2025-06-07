@@ -25,9 +25,17 @@ services:
 		sleep 3; \
 	done
 
-	
 services-shutdown:
 	docker compose down
 
 services-wipe: services-shutdown
 	sudo rm -Rf .docker
+
+generate-graphql:
+	go run github.com/99designs/gqlgen generate
+
+generate-grpc:
+	protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
+
+wire-di:
+	wire

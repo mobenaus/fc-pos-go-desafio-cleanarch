@@ -271,7 +271,8 @@ func (x *ListOrders) GetFinalPrice() float32 {
 
 type ListOrdersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Orders        []*ListOrders          `protobuf:"bytes,1,rep,name=orders,proto3" json:"orders,omitempty"`
+	Total         int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	Orders        []*ListOrders          `protobuf:"bytes,2,rep,name=orders,proto3" json:"orders,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -306,6 +307,13 @@ func (*ListOrdersResponse) Descriptor() ([]byte, []int) {
 	return file_internal_infra_grpc_protofiles_order_proto_rawDescGZIP(), []int{4}
 }
 
+func (x *ListOrdersResponse) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 func (x *ListOrdersResponse) GetOrders() []*ListOrders {
 	if x != nil {
 		return x.Orders
@@ -337,9 +345,10 @@ const file_internal_infra_grpc_protofiles_order_proto_rawDesc = "" +
 	"\x05price\x18\x02 \x01(\x02R\x05price\x12\x10\n" +
 	"\x03tax\x18\x03 \x01(\x02R\x03tax\x12\x1f\n" +
 	"\vfinal_price\x18\x04 \x01(\x02R\n" +
-	"finalPrice\"<\n" +
-	"\x12ListOrdersResponse\x12&\n" +
-	"\x06orders\x18\x01 \x03(\v2\x0e.pb.ListOrdersR\x06orders2\x8b\x01\n" +
+	"finalPrice\"R\n" +
+	"\x12ListOrdersResponse\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x03R\x05total\x12&\n" +
+	"\x06orders\x18\x02 \x03(\v2\x0e.pb.ListOrdersR\x06orders2\x8b\x01\n" +
 	"\fOrderService\x12>\n" +
 	"\vCreateOrder\x12\x16.pb.CreateOrderRequest\x1a\x17.pb.CreateOrderResponse\x12;\n" +
 	"\n" +

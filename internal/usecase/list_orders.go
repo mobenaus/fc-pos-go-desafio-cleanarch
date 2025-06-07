@@ -9,6 +9,11 @@ type OrderListInputDTO struct {
 	Limit int `json:"limit"`
 }
 
+type OrderListResultOutputDTO struct {
+	Total  int
+	Orders []OrderListOutputDTO
+}
+
 type OrderListOutputDTO struct {
 	ID         string  `json:"id"`
 	Price      float64 `json:"price"`
@@ -28,10 +33,15 @@ func NewListOrdersUseCase(
 	}
 }
 
-func (c *ListOrdersUseCase) Execute(input OrderListInputDTO) ([]OrderListOutputDTO, error) {
+func (c *ListOrdersUseCase) Execute(input OrderListInputDTO) (OrderListResultOutputDTO, error) {
 	orderList, err := c.OrderRepository.List(input.Page, input.Limit)
 	if err != nil {
-		return []OrderListOutputDTO{}, err
+		return OrderListResultOutputDTO{}, err
+	}
+
+	total, err := c.OrderRepository.GetTotal()
+	if err != nil {
+		return OrderListResultOutputDTO{}, err
 	}
 
 	var orders []OrderListOutputDTO
@@ -45,5 +55,8 @@ func (c *ListOrdersUseCase) Execute(input OrderListInputDTO) ([]OrderListOutputD
 		})
 	}
 
-	return orders, nil
+	return OrderListResultOutputDTO{
+		Total:  total,
+		Orders: orders,
+	}, nil
 }

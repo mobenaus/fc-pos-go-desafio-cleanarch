@@ -57,6 +57,7 @@ type ComplexityRoot struct {
 
 	OrderList struct {
 		Orders func(childComplexity int) int
+		Total  func(childComplexity int) int
 	}
 
 	Query struct {
@@ -141,6 +142,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OrderList.Orders(childComplexity), true
+
+	case "OrderList.total":
+		if e.complexity.OrderList.Total == nil {
+			break
+		}
+
+		return e.complexity.OrderList.Total(childComplexity), true
 
 	}
 	return 0, false
@@ -412,6 +420,8 @@ func (ec *executionContext) fieldContext_Mutation_listOrders(ctx context.Context
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "total":
+				return ec.fieldContext_OrderList_total(ctx, field)
 			case "orders":
 				return ec.fieldContext_OrderList_orders(ctx, field)
 			}
@@ -603,6 +613,50 @@ func (ec *executionContext) fieldContext_Order_FinalPrice(ctx context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OrderList_total(ctx context.Context, field graphql.CollectedField, obj *model.OrderList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OrderList_total(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Total, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OrderList_total(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OrderList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2753,6 +2807,13 @@ func (ec *executionContext) _OrderList(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("OrderList")
+		case "total":
+
+			out.Values[i] = ec._OrderList_total(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "orders":
 
 			out.Values[i] = ec._OrderList_orders(ctx, field, obj)

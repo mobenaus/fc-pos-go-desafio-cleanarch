@@ -28,7 +28,8 @@ message ListOrders {
 }
 
 message ListOrdersResponse {
-  repeated ListOrders orders = 1;
+  int64 total = 1;
+  repeated ListOrders orders = 2;
 }
 
 service OrderService {

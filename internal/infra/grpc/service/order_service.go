@@ -48,7 +48,7 @@ func (s *OrderService) ListOrders(ctx context.Context, in *pb.ListOrdersRequest)
 		return nil, err
 	}
 	var orders = []*pb.ListOrders{}
-	for _, o := range output {
+	for _, o := range output.Orders {
 		orders = append(orders, &pb.ListOrders{
 			Id:         o.ID,
 			Price:      float32(o.Price),
@@ -57,6 +57,7 @@ func (s *OrderService) ListOrders(ctx context.Context, in *pb.ListOrdersRequest)
 		})
 	}
 	return &pb.ListOrdersResponse{
+		Total:  int64(output.Total),
 		Orders: orders,
 	}, nil
 }
