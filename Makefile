@@ -1,6 +1,5 @@
 BINARY_NAME=ordersystem
 SHELL := bash
- 
 
 build:
 	cd cmd/ordersystem && go build -o ${BINARY_NAME} main.go wire_gen.go
@@ -22,8 +21,10 @@ services:
 	@while [ "$${d}" != "0" ]; do \
 		docker compose logs rabbitmq 2>&1 | grep -o "Server startup complete"; \
 		d="$$?" ; \
-		sleep 3; \
+		echo -n "." ; \
+		sleep 1; \
 	done
+	@echo "Services started!"
 
 services-shutdown:
 	docker compose down
