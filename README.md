@@ -23,6 +23,30 @@ Requisitos:
 - go
 - evans (para acessar via gRPC)
 - browser (para acessar via GraphQL)
+  - mutation exemplo para listar orders:
+```mutation listOrders {
+  listOrders(input: {page:0, limit: 20 }) {
+    total,
+    orders {
+      id,
+      Price,
+      Tax,
+      FinalPrice
+    }
+  }
+}
+```
+  - mutation para criar orders:
+```
+mutation createOrder {
+  createOrder(input: {id:"d", Price: 34.6, Tax: 0.98 }) {
+    id
+    Price
+    Tax
+    FinalPrice
+  }
+}
+```
 - VS-Code com plugin "REST Client" (para acessar via chamadas API REST)
   - arquivo:
     -  api/create_order.http
