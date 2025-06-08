@@ -95,6 +95,8 @@ Gerar os fontes para o GraphQL:
 - diretamente: go run github.com/99designs/gqlgen generate
 - via make: make generate-graphql
 
+O arquivo gqlgen.yml configura a geracao de fontes do GraphQL
+
 ## DI Wire
 
 Em caso de alteração do arquivo de definio do DI (cmd/ordersystem/wire.go):
