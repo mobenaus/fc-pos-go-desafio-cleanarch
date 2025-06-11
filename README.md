@@ -19,7 +19,6 @@ Inclua um README.md com os passos a serem executados no desafio e a porta em que
 
 Requisitos:
 - docker
-- go
 - evans (para acessar via gRPC)
 - browser (para acessar via GraphQL)
 - VS-Code com plugin "REST Client" (para acessar via chamadas API REST)
