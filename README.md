@@ -83,7 +83,7 @@ Arquivo para automatizar operações de desenvolvimento, contem alguns targets:
 
 ## Docker compose
 
-O arquivo docker-compose.yaml define os servicos de mysql e rabbitmq para a aplicacao.
+O arquivo docker-compose.yaml define os servicos de mysql, rabbitmq, migration e o build da aplicacao.
 MySQL:
 - nome do banco de dados: orders
 - usuario: root
@@ -103,8 +103,7 @@ Para gerenciar as migrações de banco de dados é utilizado o https://github.co
 - As migrations estão no diretório migrations da raiz do projeto.
 - Para criar as migrations foi utilizado o container docker da seguinte forma:
   ```docker run -v $(pwd)/migrations:/migrations --user $(id -u):$(id -g) migrate/migrate create -dir /migrations/ -ext sql orders```
-- A aplicação da migration é feita pela aplicação no momento de iniciar.
-- Os testes tambem aplicam as migrations.
+- A aplicação da migration é feita pelo docker compose no momento de iniciar.
 
 ## GRPC
 
