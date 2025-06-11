@@ -23,11 +23,6 @@ import (
 
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
-
-	// golang-migrate
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/mysql"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -36,9 +31,7 @@ func main() {
 	db := getDbConnection(configs)
 	defer db.Close()
 
-	applyDbMirgations(db)
-
-	eventDispatcher := createEventDispatcher()
+	eventDispatcher := createEventDispatcher(configs)
 
 	createOrderUseCase := NewCreateOrderUseCase(db, eventDispatcher)
 	listOrdersUseCase := NewListOrdersUseCase(db)
@@ -89,33 +82,14 @@ func startWebServer(createOrderUseCase *usecase.CreateOrderUseCase, listOrdersUs
 	webserver.Start()
 }
 
-func createEventDispatcher() *events.EventDispatcher {
-	rabbitMQChannel := getRabbitMQChannel()
+func createEventDispatcher(configs *configs.Conf) *events.EventDispatcher {
+	rabbitMQChannel := getRabbitMQChannel(configs)
 
 	eventDispatcher := events.NewEventDispatcher()
 	eventDispatcher.Register("OrderCreated", &handler.OrderCreatedHandler{
 		RabbitMQChannel: rabbitMQChannel,
 	})
 	return eventDispatcher
-}
-
-func applyDbMirgations(db *sql.DB) {
-	instance, err := mysql.WithInstance(db, &mysql.Config{})
-	if err != nil {
-		panic(err)
-	}
-
-	// o file abaixo referencia a raiz do projeto
-	migration, err := migrate.NewWithDatabaseInstance("file://migrations/", "mysql", instance)
-	if err != nil {
-		panic(err)
-	}
-
-	if err := migration.Up(); err != nil {
-		if err != migrate.ErrNoChange {
-			panic(err)
-		}
-	}
 }
 
 func getDbConnection(configs *configs.Conf) *sql.DB {
@@ -134,8 +108,8 @@ func loadConfigurations() *configs.Conf {
 	return configs
 }
 
-func getRabbitMQChannel() *amqp.Channel {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+func getRabbitMQChannel(configs *configs.Conf) *amqp.Channel {
+	conn, err := amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%s/", configs.AMQPUser, configs.AMQPPassword, configs.AMQPHost, configs.AMQPPort))
 	if err != nil {
 		panic(err)
 	}

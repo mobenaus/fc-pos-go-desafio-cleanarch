@@ -15,7 +15,7 @@ clean:
 	rm ${BINARY_NAME}
 
 services:
-	docker compose up -d
+	docker compose up -d rabbitmq mysql
 	@echo "Wait for rabbitmq started..."
 	@d=1
 	@while [ "$${d}" != "0" ]; do \

@@ -15,27 +15,29 @@ Não esqueça de criar as migrações necessárias e o arquivo api.http com a re
 Para a criação do banco de dados, utilize o Docker (Dockerfile / docker-compose.yaml), com isso ao rodar o comando docker compose up tudo deverá subir, preparando o banco de dados.
 Inclua um README.md com os passos a serem executados no desafio e a porta em que a aplicação deverá responder em cada serviço.
 ```
-## TL;DR;
+## Execução da solução
 
 Requisitos:
 - docker
-- make
 - go
 - evans (para acessar via gRPC)
 - browser (para acessar via GraphQL)
-  - mutation exemplo para listar orders:
-    ```mutation listOrders {
-      listOrders(input: {page:0, limit: 20 }) {
-        total,
-        orders {
-          id,
-          Price,
-          Tax,
-          FinalPrice
-        }
-      }
-    }
-    ```
+- VS-Code com plugin "REST Client" (para acessar via chamadas API REST)
+
+Execucao:
+- docker compose up
+
+Por default o servico responde os protocolos nas seguintes portas e URLs:
+
+- gRPC: porta 50051
+  - utilize o evans: 
+    ```evans -r repl```
+      - ```package pb```
+      - ```service OrderService```
+      - ```call CreateOrder``` para incluir order
+      - ```call ListOrders``` para listar orders
+  
+- GraphQL: [porta 8080 em localhost](http://localhost:8080/)
   - mutation para criar orders:
     ```
     mutation createOrder {
@@ -47,23 +49,27 @@ Requisitos:
       }
     }
     ```
-- VS-Code com plugin "REST Client" (para acessar via chamadas API REST)
-  - arquivo:
-    -  api/create_order.http
-    -  api/list_orders.http
-
-Execucao:
-- make run
-
-
-## Servicos e portas
-
-Por default o servico responde os protocolos nas seguintes portas e URLs:
-- gRPC: porta 50051
-  - utilize o evans: evans -r repl
-- GraphQL: [porta 8080 na URL](http://localhost:8080/)
+  - mutation exemplo para listar orders:
+    ```
+    mutation listOrders {
+      listOrders(input: {page:0, limit: 20 }) {
+        total,
+        orders {
+          id,
+          Price,
+          Tax,
+          FinalPrice
+        }
+      }
+    }
+    ```
+ 
 - REST-API: porta 8000
-  - utilize o vscode com plugin REST Client com os arquivos .http
+  - utilize o vscode com plugin REST Client
+  - arquivo:
+    -  api/create_order.http - criação de order
+    -  api/list_orders.http - listagem de order
+
 
 ## Makefile
 Arquivo para automatizar operações de desenvolvimento, contem alguns targets:
@@ -90,7 +96,7 @@ RabbitMQ:
 - senha: guest
 - postas:
   - 5672: amqp
-  - 15672: geranciamento web
+  - 15672: gerenciamento web
 
 ## Migrations
 

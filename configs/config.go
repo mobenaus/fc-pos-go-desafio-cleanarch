@@ -9,6 +9,10 @@ type Conf struct {
 	DBUser            string `mapstructure:"DB_USER"`
 	DBPassword        string `mapstructure:"DB_PASSWORD"`
 	DBName            string `mapstructure:"DB_NAME"`
+	AMQPHost          string `mapstructure:"AMQP_HOST"`
+	AMQPPort          string `mapstructure:"AMQP_PORT"`
+	AMQPUser          string `mapstructure:"AMQP_USER"`
+	AMQPPassword      string `mapstructure:"AMQP_PASSWORD"`
 	WebServerPort     string `mapstructure:"WEB_SERVER_PORT"`
 	GRPCServerPort    string `mapstructure:"GRPC_SERVER_PORT"`
 	GraphQLServerPort string `mapstructure:"GRAPHQL_SERVER_PORT"`
